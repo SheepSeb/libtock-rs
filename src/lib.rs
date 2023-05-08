@@ -47,3 +47,9 @@ pub mod temperature {
     pub type Temperature = temperature::Temperature<super::runtime::TockSyscalls>;
     pub use temperature::TemperatureListener;
 }
+
+pub mod ble {
+    use libtock_ble as ble;
+    pub type BLE = ble::Ble<super::runtime::TockSyscalls>;
+    pub use ble::TxPower;
+}

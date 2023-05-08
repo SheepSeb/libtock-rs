@@ -21,6 +21,7 @@ libtock_platform = { path = "platform" }
 libtock_proximity = { path = "apis/proximity" }
 libtock_runtime = { path = "runtime" }
 libtock_temperature = { path = "apis/temperature" }
+libtock_ble = { path = "apis/ble" }
 
 [profile.dev]
 panic = "abort"
@@ -36,6 +37,7 @@ debug = true
 exclude = ["tock"]
 members = [
     "apis/alarm",
+    "apis/ble",
     "apis/gpio",
     "apis/buttons",
     "apis/console",
