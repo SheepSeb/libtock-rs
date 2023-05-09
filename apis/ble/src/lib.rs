@@ -5,6 +5,9 @@ use libtock_platform::{ErrorCode, Syscalls};
 pub struct Ble<S: Syscalls>(S);
 
 impl<S: Syscalls> Ble<S> {
+    pub fn ble_start_advertising() -> Result<(), ErrorCode> {
+        S::allow_ro(DRIVER_NUM, 0);
+    }
     pub fn ble_stop_advertising() -> Result<(), ErrorCode> {
         S::command(DRIVER_NUM, BLE_ADV_STOP_CMD, 1, 0).to_result()
     }
@@ -29,11 +32,14 @@ const BLE_ADV_STOP_CMD: u32 = 1;
 const BLE_CFG_TX_POWER_CMD: u32 = 2;
 const BLE_SCAN_CMD: u32 = 5;
 
+const BLE_CFG_ADV_BUF_ALLOWRO: u32 = 0;
+
 const ADV_IND: u32 = 0x00;
 const ADV_DIRECT_IND: u32 = 0x01;
 const ADV_NONCONN_IND: u32 = 0x02;
 const ADV_SCAN_IND: u32 = 0x06;
 
+#[allow(dead_code)]
 #[repr(u32)]
 pub enum TxPower {
     POSITIVE_10_DBM = 10,
