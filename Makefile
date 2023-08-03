@@ -41,7 +41,8 @@ endif
 
 .PHONY: setup
 setup: setup-qemu
-	cargo install elf2tab
+	rustup install stable
+	cargo +stable install elf2tab
 	cargo miri setup
 	rustup target add --toolchain stable thumbv7em-none-eabi
 
@@ -157,6 +158,21 @@ hail:
 flash-hail:
 	LIBTOCK_PLATFORM=hail cargo run --example $(EXAMPLE) $(features) \
 		--target=thumbv7em-none-eabi $(release) -- --deploy=tockloader
+
+.PHONY: imix
+imix:
+	LIBTOCK_PLATFORM=imix cargo run --example $(EXAMPLE) $(features) \
+		--target=thumbv7em-none-eabi $(release)
+	mkdir -p target/tbf/imix
+	cp target/thumbv7em-none-eabi/release/examples/$(EXAMPLE).tab \
+		target/thumbv7em-none-eabi/release/examples/$(EXAMPLE).tbf \
+		target/tbf/imix
+
+.PHONY: flash-imix
+flash-imix:
+	LIBTOCK_PLATFORM=imix cargo run --example $(EXAMPLE) $(features) \
+		--target=thumbv7em-none-eabi $(release) -- --deploy=tockloader
+
 
 .PHONY: microbit_v2
 microbit_v2:
