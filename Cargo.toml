@@ -7,40 +7,61 @@ edition = "2021"
 license = "Apache-2.0 OR MIT"
 name = "libtock"
 repository = "https://www.github.com/tock/libtock-rs"
+rust-version.workspace = true
 version = "0.1.0"
 
+[workspace.package]
+# This must be kept in sync with rust-toolchain.toml; please see that file for
+# more information.
+rust-version = "1.70"
+
 [dependencies]
+libtock_adc = { path = "apis/adc"}
+libtock_air_quality = { path = "apis/air_quality" }
 libtock_alarm = { path = "apis/alarm" }
+libtock_ambient_light = { path = "apis/ambient_light" }
 libtock_buttons = { path = "apis/buttons" }
+libtock_buzzer = {path = "apis/buzzer"}
 libtock_console = { path = "apis/console" }
 libtock_debug_panic = { path = "panic_handlers/debug_panic" }
 libtock_gpio = { path = "apis/gpio" }
 libtock_leds = { path = "apis/leds" }
 libtock_low_level_debug = { path = "apis/low_level_debug" }
+libtock_ninedof = { path = "apis/ninedof" }
 libtock_platform = { path = "platform" }
+libtock_proximity = { path = "apis/proximity" }
 libtock_runtime = { path = "runtime" }
-libtock_temperature = { path = "apis/temperature" }
 libtock_sound_pressure = {path = "apis/sound_pressure"}
+libtock_temperature = { path = "apis/temperature" }
+
+[build-dependencies]
+libtock_build_scripts = { path = "build_scripts"}
 
 [profile.dev]
-panic = "abort"
-lto = true
 debug = true
+lto = true
+panic = "abort"
 
 [profile.release]
-panic = "abort"
-lto = true
 debug = true
+lto = true
+panic = "abort"
 
 [workspace]
 exclude = ["tock"]
 members = [
+    "apis/adc",
+    "apis/air_quality",
     "apis/alarm",
-    "apis/gpio",
+    "apis/ambient_light",
     "apis/buttons",
+    "apis/buzzer",
     "apis/console",
+    "apis/gpio",
     "apis/leds",
     "apis/low_level_debug",
+    "apis/ninedof",
+    "apis/proximity",
     "apis/temperature",
     "panic_handlers/debug_panic",
     "panic_handlers/small_panic",

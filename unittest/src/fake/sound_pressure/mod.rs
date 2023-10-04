@@ -1,10 +1,18 @@
+//! Fake implementation of the SoundPressure API, documented here:
+//!
+//! Like the real API, `SoundPressure` controls a fake sound pressure sensor. It provides
+//! a function `set_value` used to immediately call an upcall with a sound pressure value read by the sensor
+//! and a function 'set_value_sync' used to call the upcall when the read command is received.
 use crate::{DriverInfo, DriverShareRef};
 use libtock_platform::{CommandReturn, ErrorCode};
 use std::cell::Cell;
 
+// The `upcall_on_command` field is set to Some(value) if an upcall(with value as its argument) should be called when read command is received,
+// or None otherwise. It was needed for testing `read_sync` library function which simulates a synchronous sound pressure read,
+// because it was impossible to schedule an upcall during the `synchronous` read in other ways.
 pub struct SoundPressure {
     busy: Cell<bool>,
-    upcall_on_command: Cell<Option<i32>>,
+    upcall_on_command: Cell<Option<u8>>,
     share_ref: DriverShareRef,
 }
 
@@ -21,7 +29,7 @@ impl SoundPressure {
         self.busy.get()
     }
 
-    pub fn set_value(&self, value: i32) {
+    pub fn set_value(&self, value: u8) {
         if self.busy.get() {
             self.share_ref
                 .schedule_upcall(0, (value as u32, 0, 0))
@@ -30,7 +38,7 @@ impl SoundPressure {
         }
     }
 
-    pub fn set_value_sync(&self, value: i32) {
+    pub fn set_value_sync(&self, value: u8) {
         self.upcall_on_command.set(Some(value));
     }
 }

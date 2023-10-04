@@ -3,23 +3,21 @@
 
 name: size-diff
 
-# We want to run this on all pull requests. Additionally, Bors needs workflows
-# to run on the `staging` and `trying` branches to block merges on them.
+# We want to run this on all pull requests. Additionally, GitHub actions merge
+# queue needs workflows to run on the `merge_queue` trigger to block merges on
+# them.
 on:
   pull_request:
-  push:
-    branches:
-      - staging
-      - trying
+  merge_group:
 
 jobs:
   size-diff:
     # Using ubuntu-latest can cause breakage when ubuntu-latest is updated to
     # point at a new Ubuntu version. Instead, explicitly specify the version, so
     # we can update when we need to. This *could* break if we don't update it
-    # until support for 20.04 is dropped, but it is likely we'll have a reason
-    # to update to a newer Ubuntu before then anyway.
-    runs-on: ubuntu-20.04
+    # until support for this version is dropped, but it is likely we'll have a
+    # reason to update to a newer Ubuntu before then anyway.
+    runs-on: ubuntu-22.04
 
     steps:
       # Clones a single commit from the libtock-rs repository. The commit cloned
@@ -27,7 +25,7 @@ jobs:
       # We'll later add another commit (the pre-merge target branch) to the
       # repository.
       - name: Clone repository
-        uses: actions/checkout@v2.3.0
+        uses: actions/checkout@v3
 
       # The main diff script. Stores the sizes of the example binaries for both
       # the merge commit and the target branch. We display the diff in a
