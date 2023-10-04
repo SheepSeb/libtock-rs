@@ -26,6 +26,7 @@ mod sound_pressure;
 mod syscall_driver;
 mod syscalls;
 mod temperature;
+mod usb;
 
 pub use adc::Adc;
 pub use air_quality::AirQuality;
@@ -44,6 +45,7 @@ pub use sound_pressure::SoundPressure;
 pub use syscall_driver::SyscallDriver;
 pub use syscalls::Syscalls;
 pub use temperature::Temperature;
+pub use usb::Usb;
 
 #[cfg(test)]
 mod kernel_tests;
