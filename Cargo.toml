@@ -17,6 +17,7 @@ rust-version = "1.70"
 
 [dependencies]
 libtock_adc = { path = "apis/adc"}
+libtock_aes = { path = "apis/aes" }
 libtock_air_quality = { path = "apis/air_quality" }
 libtock_alarm = { path = "apis/alarm" }
 libtock_ambient_light = { path = "apis/ambient_light" }
