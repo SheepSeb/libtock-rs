@@ -51,6 +51,10 @@ pub mod gpio {
         PullDown, PullNone, PullUp,
     };
 }
+pub mod i2c_master_slave {
+    use libtock_i2c_master_slave as i2c_master_slave;
+    pub type I2CMasterSlave = i2c_master_slave::I2CMasterSlave<super::runtime::TockSyscalls>;
+}
 pub mod leds {
     use libtock_leds as leds;
     pub type Leds = leds::Leds<super::runtime::TockSyscalls>;
@@ -69,6 +73,11 @@ pub mod proximity {
     use libtock_proximity as proximity;
     pub type Proximity = proximity::Proximity<super::runtime::TockSyscalls>;
 }
+pub mod rng {
+    use libtock_rng as rng;
+    pub type Rng = rng::Rng<super::runtime::TockSyscalls>;
+    pub use rng::RngListener;
+}
 pub mod sound_pressure {
     use libtock_sound_pressure as sound_pressure;
     pub type SoundPressure = sound_pressure::SoundPressure<super::runtime::TockSyscalls>;
@@ -77,4 +86,8 @@ pub mod temperature {
     use libtock_temperature as temperature;
     pub type Temperature = temperature::Temperature<super::runtime::TockSyscalls>;
     pub use temperature::TemperatureListener;
+}
+pub mod key_value {
+    use libtock_key_value as key_value;
+    pub type KeyValue = key_value::KeyValue<super::runtime::TockSyscalls>;
 }
