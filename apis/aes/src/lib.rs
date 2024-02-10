@@ -2,7 +2,8 @@
 
 use core::cell::Cell;
 use libtock_platform::{
-    share, subscribe::OneId, DefaultConfig, ErrorCode, Subscribe, Syscalls, Upcall,
+    allow_ro, share, subscribe::OneId, AllowRo, DefaultConfig, ErrorCode, Subscribe, Syscalls,
+    Upcall,
 };
 
 pub struct Aes<S: Syscalls>(S);
@@ -50,6 +51,32 @@ impl<S: Syscalls> Aes<S> {
 
     pub fn aes_finish() -> Result<(), ErrorCode> {
         S::command(DRIVER_NUM, TOCK_AES_FINISH, 0, 0).to_result()
+    }
+
+    // Transform to rust the following C code
+    // int aes_set_iv_buffer(const uint8_t* buffer, uint32_t len) {
+    //     allow_ro_return_t aval = allow_readonly(DRIVER_NUM_AES, TOCK_AES_IV_BUF, (void*) buffer, len);
+    //     return tock_allow_ro_return_to_returncode(aval);
+    //   }
+
+    //   int aes_set_nonce_buffer(const uint8_t* buffer, uint32_t len) {
+    //     return aes_set_iv_buffer(buffer, len);
+    //   }
+
+    //   int aes_set_source_buffer(const uint8_t* buffer, uint32_t len) {
+    //     allow_ro_return_t aval = allow_readonly(DRIVER_NUM_AES, TOCK_AES_SOURCE_BUF, (void*) buffer, len);
+    //     return tock_allow_ro_return_to_returncode(aval);
+    //   }
+
+    //   int aes_set_dest_buffer(uint8_t* buffer, uint32_t len) {
+    //     allow_rw_return_t aval = allow_readwrite(DRIVER_NUM_AES, TOCK_AES_DEST_BUF, (void*) buffer, len);
+    //     return tock_allow_rw_return_to_returncode(aval);
+    //   }
+    pub fn aes_set_iv_buffer<'share>(
+        buf: &'share mut [u8],
+        allow_ro: share::Handle<AllowRo<'share, S, DRIVER_NUM, TOCK_AES_IV_BUF>>,
+    ) -> Result<(), ErrorCode> {
+        S::allow_ro::<DefaultConfig, DRIVER_NUM, TOCK_AES_IV_BUF>(allow_ro, buf)
     }
 }
 
